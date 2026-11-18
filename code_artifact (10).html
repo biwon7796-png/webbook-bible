@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>요나 — 하나님의 긍휼은 어디까지인가 | WORBS 인터랙티브 성경 웹북</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@500;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: '#F8F5EE',
+            parchment: '#F1ECE1',
+            navy: '#132238',
+            sea: '#1E4D6B',
+            gold: '#B8924A',
+            goldLight: '#DFC99B',
+            charcoal: '#24292F',
+            muted: '#5A626A'
+          },
+          fontFamily: {
+            serif: ['"Noto Serif KR"', 'Georgia', 'serif'],
+            sans: ['"Noto Sans KR"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            hebrew: ['"Noto Serif Hebrew"', '"Frank Ruhl Libre"', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #F8F5EE;
+      color: #24292F;
+      font-family: 'Noto Sans KR', sans-serif;
+      background-image: 
+        radial-gradient(rgba(184, 146, 74, 0.06) 1px, transparent 0),
+        radial-gradient(rgba(19, 34, 56, 0.03) 1px, transparent 0);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+      overflow-x: hidden;
+    }
+    .font-scripture { font-family: 'Noto Serif KR', serif; word-break: keep-all; line-height: 1.95; }
+    .hebrew-text { font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif; direction: rtl; unicode-bidi: isolate; line-height: 1.4; }
+    .reader-scale-sm .scripture-body { font-size: 0.975rem; line-height: 1.85; }
+    .reader-scale-md .scripture-body { font-size: 1.1rem; line-height: 1.95; }
+    .reader-scale-lg .scripture-body { font-size: 1.25rem; line-height: 2.05; }
+    .page-fade { animation: pageFadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    @keyframes pageFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F1ECE1; }
+    ::-webkit-scrollbar-thumb { background: #C5B89E; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #B8924A; }
+  </style>
+</head>
+<body class="reader-scale-md antialiased selection:bg-gold/25 selection:text-navy">
+
+  <header id="top-nav" class="sticky top-0 z-40 bg-ivory/95 backdrop-blur-md border-b border-gold/25 transition-all">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <button id="btn-open-toc" type="button" aria-label="전체 목차 열기" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-navy hover:bg-parchment border border-gold/30 text-xs sm:text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold">
+          <svg class="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h12M4 18h16" /></svg>
+          <span>목차</span>
+        </button>
+        <button type="button" onclick="navigateTo(0)" class="text-left truncate group focus:outline-none">
+          <span class="font-scripture font-bold text-navy text-sm sm:text-base group-hover:text-sea transition">요나</span>
+          <span class="hidden md:inline text-xs text-muted ml-2 border-l border-gold/40 pl-2">하나님의 긍휼은 어디까지인가</span>
+        </button>
+      </div>
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <button id="btn-open-lexicon" type="button" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-lg bg-navy/5 hover:bg-navy/10 text-navy border border-navy/15 text-xs sm:text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-gold">
+          <span class="hebrew-text text-gold font-bold text-sm leading-none">חוּס</span>
+          <span class="hidden sm:inline">핵심 히브리어</span>
+          <span class="sm:hidden">원어</span>
+        </button>
+        <div class="inline-flex items-center rounded-lg border border-gold/30 bg-parchment/70 p-0.5" role="group" aria-label="글자 크기 조절">
+          <button type="button" onclick="setFontSize('sm')" data-size="sm" class="font-size-btn px-2 py-1 text-xs rounded-md text-muted hover:text-navy transition" title="작게">가-</button>
+          <button type="button" onclick="setFontSize('md')" data-size="md" class="font-size-btn px-2 py-1 text-xs rounded-md bg-navy text-ivory font-medium transition" title="보통">가</button>
+          <button type="button" onclick="setFontSize('lg')" data-size="lg" class="font-size-btn px-2 py-1 text-xs rounded-md text-muted hover:text-navy transition" title="크게">가+</button>
+        </div>
+      </div>
+    </div>
+    <div class="w-full h-1 bg-parchment overflow-hidden">
+      <div id="reading-progress-bar" class="h-full bg-gradient-to-r from-sea via-gold to-navy transition-all duration-500" style="width: 0%;"></div>
+    </div>
+  </header>
+
+  <main id="app-container" class="max-w-4xl mx-auto px-4 sm:px-8 py-6 sm:py-10 min-h-[calc(100vh-8rem)]">
+  </main>
+
+  <footer id="bottom-nav" class="border-t border-gold/25 bg-parchment/60 mt-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <button id="btn-prev-chapter" type="button" onclick="prevPage()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-navy/20 bg-ivory text-navy hover:bg-navy hover:text-ivory disabled:opacity-35 disabled:pointer-events-none transition text-sm font-medium shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        <span id="prev-label">이전 페이지</span>
+      </button>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="openSummaryModal()" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gold/15 hover:bg-gold/25 text-navy border border-gold/40 text-xs sm:text-sm font-medium transition">
+          <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <span>핵심 요약 다시 보기</span>
+        </button>
+      </div>
+      <button id="btn-next-chapter" type="button" onclick="nextPage()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-navy text-ivory hover:bg-sea disabled:opacity-35 disabled:pointer-events-none transition text-sm font-medium shadow-sm">
+        <span id="next-label">다음 페이지</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="max-w-4xl mx-auto px-4 sm:px-8 pb-6 text-center text-xs text-muted">
+      Jude Lee OS · WORBS v0.1.2 기반 인터랙티브 성경 웹북
+    </div>
+  </footer>
+
+  <div id="toc-modal" class="fixed inset-0 z-50 hidden bg-navy/60 backdrop-blur-sm flex justify-start" role="dialog" aria-modal="true" aria-labelledby="toc-title">
+    <div class="w-full max-w-sm bg-ivory h-full shadow-2xl border-r border-gold/30 flex flex-col justify-between overflow-y-auto p-6">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-gold/30">
+          <div>
+            <p class="text-[11px] uppercase tracking-widest text-gold font-semibold">WORBS Digital Web-Book</p>
+            <h2 id="toc-title" class="font-scripture text-xl font-bold text-navy mt-0.5">전체 목차</h2>
+          </div>
+          <button type="button" onclick="closeModals()" class="p-2 rounded-lg text-muted hover:text-navy hover:bg-parchment transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <nav class="mt-5 space-y-2" id="toc-list"></nav>
+      </div>
+    </div>
+  </div>
+
+  <div id="lexicon-modal" class="fixed inset-0 z-50 hidden bg-navy/60 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="lexicon-title">
+    <div class="w-full max-w-2xl max-h-[88vh] bg-ivory rounded-2xl shadow-2xl border border-gold/40 flex flex-col overflow-hidden">
+      <div class="px-6 py-4 bg-navy text-ivory flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-gold text-navy">WORBS 원어 관찰</span>
+          </div>
+          <h2 id="lexicon-title" class="font-scripture text-lg sm:text-xl font-bold mt-1">요나서 핵심 히브리어 5어휘</h2>
+        </div>
+        <button type="button" onclick="closeModals()" class="p-2 rounded-lg text-ivory/70 hover:text-ivory hover:bg-white/10 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-4" id="lexicon-cards-container"></div>
+    </div>
+  </div>
+
+  <div id="summary-modal" class="fixed inset-0 z-50 hidden bg-navy/60 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="summary-title">
+    <div class="w-full max-w-xl max-h-[85vh] bg-ivory rounded-2xl shadow-2xl border border-gold/40 flex flex-col overflow-hidden">
+      <div class="px-6 py-4 bg-parchment border-b border-gold/30 flex items-center justify-between">
+        <div>
+          <span class="text-[11px] font-semibold text-sea">WORBS 전체 구조 및 핵심 요약</span>
+          <h2 id="summary-title" class="font-scripture text-lg font-bold text-navy">요나서 1–4장 한눈에 보기</h2>
+        </div>
+        <button type="button" onclick="closeModals()" class="p-2 rounded-lg text-muted hover:text-navy hover:bg-ivory transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 text-sm">
+        <div class="p-4 rounded-xl bg-navy text-ivory">
+          <p class="text-xs text-goldLight font-semibold mb-1">[WORBS 본문 연구 · 전체 핵심 명제]</p>
+          <p class="font-scripture leading-relaxed text-sm sm:text-base">
+            “요나서는 하나님의 긍휼을 받은 선지자가 원수에게 베풀어지는 동일한 긍휼에는 저항하는 모습을 통해, 하나님의 자비가 인간이 설정한 경계를 넘어선다는 사실을 드러내는 예언자 서사입니다.”
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="artifact-modal" class="fixed inset-0 z-50 hidden bg-navy/80 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div class="w-full max-w-3xl max-h-[90vh] bg-ivory rounded-2xl shadow-2xl border border-gold/50 flex flex-col overflow-hidden">
+      <div class="px-5 py-3.5 bg-navy text-ivory flex items-center justify-between">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-sea text-ivory shrink-0">보충 시각·배경 자료</span>
+          <h3 id="artifact-modal-title" class="font-scripture text-sm sm:text-base font-bold truncate">자료 상세 보기</h3>
+        </div>
+        <button type="button" onclick="closeModals()" class="p-1.5 rounded-lg text-ivory/80 hover:text-ivory hover:bg-white/10 transition shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="artifact-modal-body" class="p-5 sm:p-6 overflow-y-auto space-y-4"></div>
+    </div>
+  </div>
+
+  <script>
+    const HEBREW_LEXICON = [
+      { id: 'raah', hebrew: 'רָעָה', translit: 'raʿah', meaning: '악, 재앙, 불쾌함', chapters: '1:2, 1:7–8, 3:8, 3:10, 4:1, 4:2, 4:6', significance: '니느웨의 도덕적 악, 선원들의 재앙, 요나의 불쾌함에 동일한 어근이 반복됩니다.', status: 'VERIFY' },
+      { id: 'yare', hebrew: 'יָרֵא', translit: 'yareʾ', meaning: '두려워하다, 경외하다', chapters: '1:5, 1:9, 1:10, 1:16', significance: '요나는 말로만 고백하지만 이방 선원들은 여호와를 크게 두려워하며 참된 경외에 이릅니다.', status: 'VERIFY' },
+      { id: 'manah', hebrew: 'מָנָה', translit: 'manah', meaning: '지정하다, 준비하다', chapters: '1:17, 4:6, 4:7, 4:8', significance: '피조세계 전체를 다스리시는 창조주의 주권적 통치를 보여줍니다.', status: 'VERIFY' },
+      { id: 'shuv', hebrew: 'שׁוּב', translit: 'shuv', meaning: '돌아오다, 돌이키다', chapters: '1:13, 3:8, 3:9, 3:10', significance: '백성이 악한 길에서 돌이킬 때, 하나님께서도 진노를 거두시고 뜻을 돌이키십니다.', status: 'VERIFY' },
+      { id: 'hus', hebrew: 'חוּס', translit: 'ḥus', meaning: '아끼다, 불쌍히 여기다', chapters: '4:10, 4:11', significance: '요나는 하룻밤의 식물을 아꼈고, 하나님은 십이만여 명의 니느웨 생명을 아끼십니다.', status: 'APPROVED_WITH_VERIFY' }
+    ];
+
+    const ARTIFACTS = {
+      nineveh_ruins: {
+        title: '고대 니느웨 유적 — 마시키 성문(Mashki Gate)',
+        category: '고고학 유적 사진 · 보충 시각 자료',
+        creator: 'Fredarch (Wikimedia Commons)',
+        period: '신아시리아 제국기 유적',
+        collection: '고대 니느웨 고고학 구역',
+        license: 'CC BY-SA 3.0 (Wikimedia Commons)',
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mashki_Gate%2C_Nineveh.jpg/960px-Mashki_Gate%2C_Nineveh.jpg',
+        sourceUrl: 'https://commons.wikimedia.org/wiki/File:Mashki_Gate,_Nineveh.jpg',
+        caption: '요나 3장에서 요나가 걸어 들어가 심판을 선포했던 고대 아시리아의 수도 니느웨의 성문 유적입니다.'
+      },
+      lamassu_relief: {
+        title: '인면유익황소상 라마수(Lamassu) — 아시리아 왕궁 수호 부조',
+        category: '박물관 유물 · 보충 시각 자료',
+        creator: '신아시리아 제국 조각가',
+        period: '기원전 8–7세기경',
+        collection: '대영박물관 / 루브르 박물관',
+        license: 'Public Domain (Wikimedia Commons)',
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Human-headed_winged_bull_facing_front.jpg/800px-Human-headed_winged_bull_facing_front.jpg',
+        sourceUrl: 'https://commons.wikimedia.org/wiki/File:Human-headed_winged_bull_facing_front.jpg',
+        caption: '이스라엘을 위협하던 당대 초강대국 아시리아 제국의 위엄과 군사적 압도감을 보여주는 왕궁 입구 수호신 부조입니다.'
+      },
+      michelangelo_jonah: {
+        title: '시스티나 경당 천장화 〈선지자 요나 (Prophet Jonah)〉',
+        category: '역사적 미술작품 · 보충 시각 자료',
+        creator: '미켈란젤로 부오나로티',
+        period: '1511년경',
+        collection: '바티칸 시스티나 경당',
+        license: 'Public Domain (Wikimedia Commons)',
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Sistine_jonah.jpg/800px-Sistine_jonah.jpg',
+        sourceUrl: 'https://commons.wikimedia.org/wiki/File:Sistine_jonah.jpg',
+        caption: '제단 위 정면에 배치된 미켈란젤로의 〈요나〉는 왼편의 큰 물고기와 머리 위의 박넝쿨(식물)을 함께 배치하여 하나님의 섭리를 표현합니다.'
+      }
+    };
+
+    const PAGES = [
+      { id: 0, short: '표지', title: '요나 — 하나님의 긍휼은 어디까지인가', range: '서문 및 연구 안내' },
+      { id: 1, short: '제1장', title: '도망하는 선지자', range: '요나 1:1–16' },
+      { id: 2, short: '제2장', title: '바다 깊은 곳에서', range: '요나 1:17–2:10' },
+      { id: 3, short: '제3장', title: '니느웨가 돌이키다', range: '요나 3:1–10' },
+      { id: 4, short: '제4장', title: '하나님은 누구를 아끼시는가', range: '요나 4:1–11' },
+      { id: 5, short: '결론', title: '하나님의 마지막 질문', range: '열린 결말과 연구 판정' }
+    ];
+
+    const state = { currentPage: 0, fontSize: 'md' };
+
+    function navigateTo(pageIndex) {
+      if (pageIndex < 0 || pageIndex >= PAGES.length) return;
+      state.currentPage = pageIndex;
+      renderCurrentPage();
+      updateNavigationUI();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function prevPage() { navigateTo(state.currentPage - 1); }
+    function nextPage() { navigateTo(state.currentPage + 1); }
+
+    function setFontSize(size) {
+      state.fontSize = size;
+      document.body.classList.remove('reader-scale-sm', 'reader-scale-md', 'reader-scale-lg');
+      document.body.classList.add(`reader-scale-${size}`);
+
+      document.querySelectorAll('.font-size-btn').forEach(btn => {
+        if (btn.dataset.size === size) {
+          btn.classList.add('bg-navy', 'text-ivory', 'font-medium');
+          btn.classList.remove('text-muted');
+        } else {
+          btn.classList.remove('bg-navy', 'text-ivory', 'font-medium');
+          btn.classList.add('text-muted');
+        }
+      });
+    }
+
+    function updateNavigationUI() {
+      const progress = (state.currentPage / (PAGES.length - 1)) * 100;
+      document.getElementById('reading-progress-bar').style.width = `${progress}%`;
+
+      document.getElementById('btn-prev-chapter').disabled = state.currentPage === 0;
+      document.getElementById('btn-next-chapter').disabled = state.currentPage === PAGES.length - 1;
+
+      document.getElementById('prev-label').textContent = state.currentPage > 0 ? `이전: ${PAGES[state.currentPage - 1].short}` : '이전 페이지';
+      document.getElementById('next-label').textContent = state.currentPage < PAGES.length - 1 ? `다음: ${PAGES[state.currentPage + 1].short}` : '마지막 페이지';
+
+      document.getElementById('toc-list').innerHTML = PAGES.map(p => {
+        const isActive = p.id === state.currentPage;
+        return `
+          <button type="button" onclick="closeModals(); navigateTo(${p.id});"
+            class="w-full text-left px-4 py-3 rounded-xl transition flex items-center justify-between ${isActive ? 'bg-navy text-ivory shadow-sm' : 'hover:bg-parchment text-charcoal'}">
+            <div>
+              <div class="text-xs ${isActive ? 'text-goldLight' : 'text-gold'} font-semibold">${p.short} · ${p.range}</div>
+              <div class="font-scripture font-bold text-sm mt-0.5">${p.title}</div>
+            </div>
+            ${isActive ? '<span class="text-xs px-2 py-0.5 rounded bg-gold/20 text-goldLight">현재</span>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function openModal(id) {
+      closeModals();
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+
+    function closeModals() {
+      ['toc-modal', 'lexicon-modal', 'summary-modal', 'artifact-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+    }
+
+    function openLexiconModal(highlightId = null) {
+      document.getElementById('lexicon-cards-container').innerHTML = HEBREW_LEXICON.map(word => {
+        const isHighlighted = highlightId === word.id;
+        return `
+          <div class="p-4 sm:p-5 rounded-xl border ${isHighlighted ? 'border-gold bg-gold/10 ring-2 ring-gold/40' : 'border-gold/30 bg-parchment/60'} transition">
+            <div class="flex flex-wrap items-baseline justify-between gap-2 pb-3 border-b border-gold/20">
+              <div class="flex items-baseline gap-3">
+                <span class="hebrew-text text-3xl sm:text-4xl font-bold text-navy" lang="he" dir="rtl">${word.hebrew}</span>
+                <span class="text-sm font-mono text-sea font-semibold">(${word.translit})</span>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-navy/10 text-navy">${word.chapters}</span>
+            </div>
+            <div class="mt-3">
+              <p class="text-sm font-bold text-navy mb-1">기본 의미: <span class="text-sea">${word.meaning}</span></p>
+              <p class="text-xs sm:text-sm text-charcoal/90 leading-relaxed">${word.significance}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+      openModal('lexicon-modal');
+    }
+
+    function openSummaryModal() { openModal('summary-modal'); }
+
+    function openArtifactModal(key) {
+      const item = ARTIFACTS[key];
+      if (!item) return;
+      document.getElementById('artifact-modal-title').textContent = item.title;
+      document.getElementById('artifact-modal-body').innerHTML = `
+        <div class="rounded-xl overflow-hidden border border-gold/30 bg-parchment">
+          <img src="${item.imageUrl}" alt="${item.title}" class="w-full max-h-[52vh] object-contain mx-auto bg-navy/5" 
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div style="display:none;" class="flex-col items-center justify-center p-8 text-center text-muted">
+            <p class="text-sm font-semibold text-navy">이미지 로드 실패 (원본 출처 확인 가능)</p>
+          </div>
+        </div>
+        <div class="space-y-2 text-xs sm:text-sm mt-4">
+          <p class="text-charcoal leading-relaxed">${item.caption}</p>
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gold/25 text-xs">
+            <div><span class="font-semibold text-navy">작가:</span> ${item.creator}</div>
+            <div><span class="font-semibold text-navy">소장:</span> ${item.collection}</div>
+          </div>
+          <div class="pt-2">
+            <a href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-navy text-ivory hover:bg-sea text-xs font-medium transition">
+              Wikimedia Commons 원본 출처 열기
+            </a>
+          </div>
+        </div>
+      `;
+      openModal('artifact-modal');
+    }
+
+    function renderSectionBadge(type) {
+      if (type === 'worbs') {
+        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-navy text-ivory tracking-wide"><span class="w-1.5 h-1.5 rounded-full bg-gold"></span>WORBS 본문 연구</span>`;
+      }
+      return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-sea/15 text-sea border border-sea/30 tracking-wide"><span class="w-1.5 h-1.5 rounded-full bg-sea"></span>보충 시각·배경 자료</span>`;
+    }
+
+    function renderArtifactCard(key) {
+      const item = ARTIFACTS[key];
+      if (!item) return '';
+      return `
+        <div class="rounded-2xl border border-sea/25 bg-ivory overflow-hidden shadow-sm flex flex-col">
+          <div class="relative aspect-[16/10] bg-parchment overflow-hidden group cursor-pointer" onclick="openArtifactModal('${key}')">
+            <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div style="display:none;" class="w-full h-full flex-col items-center justify-center p-4 text-center text-muted">
+              <span class="text-xs font-semibold text-navy">이미지 로드 실패</span>
+            </div>
+            <div class="absolute bottom-2.5 right-2.5"><span class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-ivory/90 text-navy shadow">자세히 보기 ↗</span></div>
+          </div>
+          <div class="p-4 flex-1 flex flex-col justify-between">
+            <h4 class="font-scripture font-bold text-navy text-sm leading-snug">${item.title}</h4>
+            <p class="text-xs text-muted mt-1.5 line-clamp-3">${item.caption}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderYoutubeEmbed(videoId, title, desc, channel) {
+      return `
+        <div class="mt-8 p-5 sm:p-7 rounded-2xl bg-parchment/90 border border-sea/25 space-y-4">
+          <div class="flex items-center gap-2">
+            ${renderSectionBadge('supplement')}
+            <h3 class="font-scripture text-lg font-bold text-navy">영상 자료: ${title}</h3>
+          </div>
+          <div class="aspect-video bg-navy relative rounded-xl overflow-hidden border border-gold/30">
+            <iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?rel=0" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="px-2">
+            <p class="text-[11px] font-semibold text-sea mb-1">출처: ${channel}</p>
+            <p class="text-xs text-muted leading-relaxed">${desc}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCoverPage() {
+      return `
+        <div class="page-fade">
+          <div class="relative rounded-3xl overflow-hidden bg-navy text-ivory shadow-xl border border-gold/40 text-center px-6 sm:px-14 py-12 sm:py-20">
+            <div class="relative z-10 max-w-2xl mx-auto">
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-gold/40 text-goldLight text-xs font-medium mb-8">
+                <span>Jude Lee OS · WORBS v0.1.2</span>
+              </div>
+              <p class="hebrew-text text-gold text-2xl sm:text-3xl mb-3 tracking-widest" lang="he" dir="rtl">יוֹנָה</p>
+              <h1 class="font-scripture text-5xl sm:text-7xl font-bold tracking-tight text-ivory mb-4">요나</h1>
+              <p class="font-scripture text-xl sm:text-2xl text-goldLight font-medium mb-8">하나님의 긍휼은 어디까지인가</p>
+              <div class="w-16 h-px bg-gold/60 mx-auto mb-8"></div>
+              <blockquote class="font-scripture text-base sm:text-xl text-ivory/95 leading-relaxed bg-white/5 border border-gold/25 rounded-2xl px-6 py-6 mb-10 shadow-inner">
+                “하나님은 니느웨를 아끼셨습니다.<br class="hidden sm:inline" /> 그러나 요나는 그 긍휼을 받아들이지 못했습니다.”
+              </blockquote>
+              <button type="button" onclick="navigateTo(1)" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gold text-navy font-bold text-base hover:bg-goldLight transition shadow-lg">
+                <span>이야기 시작하기</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderChapter1() {
+      return `
+        <article class="page-fade space-y-8">
+          <header class="border-b border-gold/30 pb-6">
+            <div class="flex items-center gap-2 mb-3">
+              ${renderSectionBadge('worbs')}
+              <span class="text-xs font-semibold text-sea bg-sea/10 px-2.5 py-1 rounded-md">제1장 · 요나 1:1–16</span>
+            </div>
+            <h1 class="font-scripture text-3xl sm:text-4xl font-bold text-navy">제1장. 도망하는 선지자</h1>
+          </header>
+          <section class="p-5 sm:p-7 rounded-2xl bg-ivory border border-gold/30 shadow-sm space-y-4">
+            <div class="scripture-body font-scripture text-charcoal space-y-3">
+              <p>여호와의 말씀이 아밋대의 아들 요나에게 임하여 이르시되 “너는 일어나 저 큰 성읍 니느웨로 가서 그것을 향하여 외치라...” 하시니라. 그러나 요나가 여호와의 얼굴을 피하려고 일어나 다시스로 도망하려 하여 욥바로 내려갔더니 마침 다시스로 가는 배를 만난지라.</p>
+            </div>
+            <div class="p-4 rounded-xl bg-navy text-ivory text-sm leading-relaxed">
+              <div class="text-xs text-goldLight font-semibold mb-1">[WORBS 핵심 해설]</div>
+              하나님을 경외한다고 고백하는 요나는 도망하지만, 이방 선원들은 하나님의 능력을 경험하며 여호와를 두려워하게 됩니다.
+            </div>
+          </section>
+          ${renderYoutubeEmbed('s1bYwT8bQyY', '고대 페니키아와 지중해 무역선', '요나가 욥바에서 다시스행 무역선에 올랐던 고대 지중해 해상 교역과 항해 문화를 살펴보는 보충 자료입니다.', '관련 다큐멘터리 채널')}
+        </article>
+      `;
+    }
+
+    function renderChapter2() {
+      return `
+        <article class="page-fade space-y-8">
+          <header class="border-b border-gold/30 pb-6">
+            <div class="flex items-center gap-2 mb-3">
+              ${renderSectionBadge('worbs')}
+              <span class="text-xs font-semibold text-sea bg-sea/10 px-2.5 py-1 rounded-md">제2장 · 요나 1:17–2:10</span>
+            </div>
+            <h1 class="font-scripture text-3xl sm:text-4xl font-bold text-navy">제2장. 바다 깊은 곳에서</h1>
+          </header>
+          <section class="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#0C1829] to-[#1E4D6B] text-ivory p-6 sm:p-9 shadow-xl border border-sea/40">
+            <div class="scripture-body font-scripture text-ivory/95 space-y-3">
+              <p>여호와께서 이미 큰 물고기를 예비하사 요나를 삼키게 하셨으므로... “내가 받는 고난으로 말미암아 여호와께 불러 아뢰었더니 주께서 내게 대답하셨고 내가 스올의 뱃속에서 부르짖었더니 주께서 내 음성을 들으셨나이다.”</p>
+            </div>
+          </section>
+          <section class="p-5 sm:p-7 rounded-2xl bg-ivory border border-gold/35 space-y-4 text-center">
+            <p class="font-scripture text-xl font-bold text-navy tracking-wide">“구원은 여호와께 속하였습니다”</p>
+            <p class="text-sm text-charcoal/90 mt-2">자신의 구원을 찬양한 것과 타인의 구원을 기뻐하는 것은 별개의 문제였습니다.</p>
+          </section>
+          ${renderYoutubeEmbed('dLIabZc0O4c', '요나서 전체 문학 구조와 핵심 메시지 개관', '요나서의 대칭적 서사 구조와 선지자의 아이러니를 시각적으로 개관하는 보충 영상입니다.', 'BibleProject 채널')}
+        </article>
+      `;
+    }
+
+    function renderChapter3() {
+      return `
+        <article class="page-fade space-y-8">
+          <header class="border-b border-gold/30 pb-6">
+            <div class="flex items-center gap-2 mb-3">
+              ${renderSectionBadge('worbs')}
+              <span class="text-xs font-semibold text-sea bg-sea/10 px-2.5 py-1 rounded-md">제3장 · 요나 3:1–10</span>
+            </div>
+            <h1 class="font-scripture text-3xl sm:text-4xl font-bold text-navy">제3장. 니느웨가 돌이키다</h1>
+          </header>
+          <section class="p-5 sm:p-7 rounded-2xl bg-ivory border border-gold/30 shadow-sm space-y-4">
+            <div class="scripture-body font-scripture text-charcoal space-y-3">
+              <p>여호와의 말씀이 두 번째로 요나에게 임하니라... 니느웨 사람들이 하나님을 믿고 금식을 선포하고... “각기 악한 길과 손으로 행한 강포에서 떠날 것이라.” 하나님이 그 악한 길에서 돌이켜 떠난 것을 보시고 뜻을 돌이키사 재앙을 내리지 아니하시니라.</p>
+            </div>
+          </section>
+          <section class="space-y-4">
+            <div class="flex items-center gap-2">
+              ${renderSectionBadge('supplement')}
+              <h2 class="font-scripture text-xl font-bold text-navy">고대 아시리아 제국 유적</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              ${renderArtifactCard('nineveh_ruins')}
+              ${renderArtifactCard('lamassu_relief')}
+            </div>
+          </section>
+          ${renderYoutubeEmbed('7eBL5quTa9s', '니느웨 왕궁 부조 해설', '고대 아시리아의 위엄과 권력을 박물관 유물로 살펴보는 자료입니다.', 'The British Museum 채널')}
+        </article>
+      `;
+    }
+
+    function renderChapter4() {
+      return `
+        <article class="page-fade space-y-9">
+          <header class="border-b border-gold/40 pb-6">
+            <div class="flex items-center gap-2 mb-3">
+              ${renderSectionBadge('worbs')}
+              <span class="text-xs font-semibold text-navy bg-gold/25 px-2.5 py-1 rounded-md">제4장 · 요나 4:1–11</span>
+            </div>
+            <h1 class="font-scripture text-3xl sm:text-4xl font-bold text-navy">제4장. 하나님은 누구를 아끼시는가</h1>
+          </header>
+          <section class="p-6 sm:p-8 rounded-3xl bg-ivory border border-gold/40 space-y-6">
+            <h2 class="font-scripture text-xl font-bold text-navy">동일한 동사 ‘아끼다(<span class="hebrew-text" lang="he" dir="rtl">חוּס</span>)’의 두 주체</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="p-5 rounded-2xl bg-parchment border border-gold/30">
+                <h3 class="font-scripture text-lg font-bold text-navy mb-2">요나가 식물을 아낀 마음</h3>
+                <p class="text-sm text-charcoal/90">수고하지도, 재배하지도 않은 일시적 식물에 대한 자신의 편의적 애착.</p>
+              </div>
+              <div class="p-5 rounded-2xl bg-navy text-ivory shadow-md">
+                <h3 class="font-scripture text-lg font-bold text-ivory mb-2">하나님이 니느웨를 아끼시는 마음</h3>
+                <p class="text-sm text-ivory/90">좌우를 분변하지 못하는 자가 십이만여 명이나 되며 가축도 많이 있는, 창조 세계 생명들을 향한 광대한 긍휼.</p>
+              </div>
+            </div>
+          </section>
+          <section class="relative rounded-3xl bg-gradient-to-br from-navy to-sea text-ivory p-8 sm:p-14 text-center shadow-2xl">
+            <p class="hebrew-text text-gold text-2xl font-bold" lang="he" dir="rtl">וַאֲנִי לֹא אָחוּס עַל־נִינְוֵה הָעִיר הַגְּדוֹלָה</p>
+            <blockquote class="font-scripture text-2xl sm:text-4xl font-bold text-ivory leading-snug mt-4">
+              “하물며 이 큰 성읍 니느웨를 내가 아끼는 것이 어찌 합당하지 아니하겠느냐”
+            </blockquote>
+          </section>
+          ${renderYoutubeEmbed('aI0DMB794kM', '하나님의 긍휼과 요나의 반응 성찰', '원수에게 베풀어진 긍휼에 분노하는 선지자의 마음과 그것을 바로잡으시는 하나님의 가르침을 성찰합니다.', '성경연구 추천 영상')}
+        </article>
+      `;
+    }
+
+    function renderConclusionPage() {
+      return `
+        <article class="page-fade space-y-10">
+          <section class="rounded-3xl bg-ivory border-2 border-gold/50 p-7 sm:p-14 text-center shadow-lg space-y-7">
+            <h1 class="font-scripture text-3xl sm:text-5xl font-bold text-navy">하나님의 마지막 질문</h1>
+            <div class="max-w-2xl mx-auto p-7 sm:p-10 rounded-3xl bg-navy text-ivory shadow-xl space-y-4">
+              <blockquote class="font-scripture text-2xl font-bold leading-snug">
+                “나는 하나님의 긍휼이 어디까지 미치기를 바라고 있습니까?”
+              </blockquote>
+            </div>
+          </section>
+          <section class="space-y-6">
+            <h2 class="font-scripture text-2xl font-bold text-navy">${renderSectionBadge('supplement')} 보충 미술 자료</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              ${renderArtifactCard('michelangelo_jonah')}
+            </div>
+          </section>
+        </article>
+      `;
+    }
+
+    function renderCurrentPage() {
+      const container = document.getElementById('app-container');
+      switch (state.currentPage) {
+        case 0: container.innerHTML = renderCoverPage(); break;
+        case 1: container.innerHTML = renderChapter1(); break;
+        case 2: container.innerHTML = renderChapter2(); break;
+        case 3: container.innerHTML = renderChapter3(); break;
+        case 4: container.innerHTML = renderChapter4(); break;
+        case 5: container.innerHTML = renderConclusionPage(); break;
+      }
+    }
+
+    document.getElementById('btn-open-toc').addEventListener('click', () => openModal('toc-modal'));
+    document.getElementById('btn-open-lexicon').addEventListener('click', () => openLexiconModal());
+
+    ['toc-modal', 'lexicon-modal', 'summary-modal', 'artifact-modal'].forEach(id => {
+      document.getElementById(id).addEventListener('click', (e) => {
+        if (e.target.id === id) closeModals();
+      });
+    });
+
+    window.onload = function () {
+      setFontSize('md');
+      updateNavigationUI();
+      renderCurrentPage();
+    };
+  </script>
+</body>
+</html>
